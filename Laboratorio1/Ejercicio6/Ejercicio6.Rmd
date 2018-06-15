@@ -1,0 +1,100 @@
+
+Nombres : Cristian Aguirre Janampa
+
+Respuesta : Operaciones sobre el los datos integrados de R, como quakes y cars
+
+#### Item (a)
+
+Con la funcion write.table escribimos en el archivo q5.txt todos los datos tal que la magnitud mag sea mayor o igual que 5, el delimitador ! lo hacemos con el parametro sep = "!". Y el parametro row.names = FALSE indicamos que las filas no tengan nombre.
+```{r}
+#Usamos el datadrame quakes, la cual se encuentra dentro del conjunto de datos
+#datasets
+
+write.table(quakes[quakes$mag >= 5, ], file = "/home/cristian/Desktop/Tarea_de_R_Lab1/q5.txt", row.names = FALSE, sep = "!")
+
+# La ubicacion del archivo q5.txt es en la direccion mencionada
+
+```
+
+Ahora leemos del archivo q5.txt y lo pasamos al dataframe q5.dframe
+
+```{r}
+q5.dframe <- read.table(file = "/home/cristian/Desktop/Tarea_de_R_Lab1/q5.txt", header = TRUE, sep = "!")  #Usamos read.table para leer la tabla del archivo q5.txt
+q5.dframe
+```
+#### Item (b)
+
+Codigo para la elaboracion de una grafica de education vs income, con puntos negros con prestige mayor que 80 y puntos blancos con prestige menores o igual que 80.
+
+```{r}
+plot.new()  #Anunciamos que vamos a crear un plot
+plot.window(range(0,100), range(0,100)) #Los parametros del plot
+axis(1) #Creamos una linea horizontal abajo
+axis(2) #Creamos una linea vertical a la izquierda
+
+#Colocamos los puntos con prestige menor o igual que 80
+points(carData::Duncan$education[carData::Duncan$prestige<=80], carData::Duncan$income[carData::Duncan$prestige<=80])
+
+#Colocamos los puntos con prestige mayor que 80
+points(carData::Duncan$education[carData::Duncan$prestige>80], carData::Duncan$income[carData::Duncan$prestige>80], pch = 19)
+mtext("education", side = 1, line = 3)    #Colocamos education en la parte de abajo
+mtext("income", side = 2, line = 3)       #Colocamos income en la parte izquierda
+
+#Los comandos axis y mtext crearan las caracteristicas del plot la cual sera un grafico
+# education v.s. income
+
+```
+
+Ahora agregamos la leyenda al grafico con el siguiente comando
+Creamos el mismo plot; pero ahora con su respectiva leyenda
+
+```{r}
+
+#legend(5, 100, c("prestige > 80", "prestige <= 80"), pch = c(19,21)), lo agregamos al final 
+plot.new()
+plot.window(range(0,100), range(0,100))
+axis(1)
+axis(2)
+points(carData::Duncan$education[carData::Duncan$prestige<=80], carData::Duncan$income[carData::Duncan$prestige<=80])
+points(carData::Duncan$education[carData::Duncan$prestige>80], carData::Duncan$income[carData::Duncan$prestige>80], pch = 19)
+mtext("education", side = 1, line = 3)
+mtext("income", side = 2, line = 3)
+legend(5, 100, c("prestige > 80", "prestige <= 80"), pch = c(19,21))
+
+```
+
+Ahora para guardar nuestro grafico en un archivo png, hacemos lo siguiente
+Usaremos el comando png, la cual nos indica que nuestro archivo sera una imagen .png
+Este comando espera al otro comando dev.off para poder guardar la imagen
+
+```{r}
+
+png(filename = "Ejercicio6.png", width = 600, height = 600)
+plot.new()
+plot.window(range(0,100), range(0,100))
+axis(1)
+axis(2)
+points(carData::Duncan$education[carData::Duncan$prestige<=80], carData::Duncan$income[carData::Duncan$prestige<=80])
+points(carData::Duncan$education[carData::Duncan$prestige>80], carData::Duncan$income[carData::Duncan$prestige>80], pch = 19)
+mtext("education", side = 1, line = 3)
+mtext("income", side = 2, line = 3)
+legend(5, 100, c("prestige > 80", "prestige <= 80"), pch = c(19,21))
+dev.off()
+
+```
+
+#### Item (c)
+
+Creamos la lista con los 3 conjuntos de datos : quakes, q5.dframe y Duncan
+```{r}
+
+#Creamos la lista exer, la cual contiene a los 3 objetos (quakes, q5.dframe, carData)
+exer <- list(quakes, q5.dframe, carData::Duncan)
+
+#Escribimos el archivo exer dentro de un archivo Ejercicio_df.txt ubicado
+#en la siguiente direccion
+write(exer, file = "/home/cristian/Desktop/Tarea_de_R_Lab1/Ejercicio_df.txt")
+
+```
+
+

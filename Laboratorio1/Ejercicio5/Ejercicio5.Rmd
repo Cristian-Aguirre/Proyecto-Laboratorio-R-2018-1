@@ -1,0 +1,174 @@
+---
+title: "Ejercicio 5"
+author: "Jesus Condor Torres"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+title: "Ejercicio 5"
+author: "Jesus Condor Torres"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+###Respuesta 5.a
+
+En esta pregunta explicaremos lo que hace el siguiente codigo paso a paso, veamos a continuacion el codigo a ejecutarse paso a paso:
+
+```{r new}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+```
+
+Esta funcion _plot.new_ prepara un nuevo marco de graficos, tambien causa la finalizacion del un trazado grafico si estuviera en funcionamiento.
+
+
+En esta parte la funcion _plot.window_ configura el sistema de coordenadas para la nueva ventana de graficos compuesta por los datos de presion y temperatura con sus maximos y minimos valores obtenidos a partir de la funcion _range_ y los datos a patir de las columnas _temperature_ y _pressure_.
+
+
+La funcion _box_ dibuja un cuadro para el cual se dara el grafico que se desea obtener.
+
+
+
+```{r window}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+```
+
+La funcion _axis_ con el argumento 1 hace que se pongan los datos en las coordenadas del eje X.
+
+
+
+```{r box}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+axis(2)
+```
+
+La siguiente funcion _axis_ coen el argumento 2 hace que se pongan los datos en las coordenadas del eje Y.
+
+
+
+```{r axis}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+axis(2)
+points(pressure$temperature, pressure$pressure)
+```
+
+Esta funcion _points_ dibuja el comportamiento de la grafica a traves de puntos lo cual se puede apreciar en el grafico anterior.
+
+
+
+```{r mtext}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+axis(2)
+points(pressure$temperature, pressure$pressure)
+mtext("temperatura", side = 1, line = 3)
+```
+
+La siguiente funcion _mtext_ pone el subtitulo en el eje X con el nombre de **temperatura**.
+
+
+
+```{r range}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+axis(2)
+points(pressure$temperature, pressure$pressure)
+mtext("temperatura", side = 1, line = 3)
+mtext("presion", side = 2, line = 3)
+```
+
+Usando de nuevo la funcion _mtext_ subtitulamos el eje Y por el nombre de **presion**.
+
+
+
+```{r plot}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+axis(2)
+points(pressure$temperature, pressure$pressure)
+mtext("temperatura", side = 1, line = 3)
+mtext("presion", side = 2, line = 3)
+mtext("Presion de vapor de Mercurio\ncomo una funcion de la temperatura", 
+       side = 3,line = 1, font = 2)
+```
+
+Finalmente la ultima funcion _mtext_ pone el titulo principal de la grafica de nuestro codigo.
+
+
+###Respuesta 5.b
+En el segundo item haremos algo similar de la grafica del _item a_ usando la funcion **grid** y explicaremos brevemente que es lo que hace cada funcion de grid.
+
+```{r grid}
+plot.new() # Iniciando los marcos para un nuevo grafico
+plot(pressure$temperature, pressure$pressure, xlab = "temperarura", ylab =    "presion") # Graficamos el marco y los subtitulos del eje X e Y
+mtext("Presion de vapor de Mercurio\ncomo una funcion de la temperatura", side = 3, line = 1, font = 2, col = "blue" ) # Asignamos el titulo del grafico
+grid(5, 5, lwd = 1, lty = 2, col = "yellow")
+points(pressure$temperature, pressure$pressure, col = "green") # Insertamos los puntos de dispersion de la grafica
+```
+
+En la imagen anterior se puede mostrar como un conjunto de funciones pueden hacer una grafica. En esta parte nos enfocaremos en la funcion **grid**, esta funcion contiene las siguientes objetos:
+
+* nx y ny estan representados por el numero 5 el define el numero de lineas tanto horizontal como vertical dentro del marco de la grafica.
+* La expresion _lwd_ ayuda a ver la anchura de las lineas definidas.
+* La expresion _lty_ ayuda a ver la separacion de lineas punteadas.
+* La expresion _col_ asigna el color de las lineas.
+
+
+###Otros ejemplos de plot y grid
+Modificaremos un poco el primer grafico con las mismas funciones del principio.
+
+```{r lwd}
+plot.new()
+plot.window(range(pressure$temperature), range(pressure$pressure))
+box()
+axis(1)
+axis(2)
+points(pressure$temperature, pressure$pressure, col = "blue")
+mtext("temperatura", side = 1, line = 3, col = "black")
+mtext("presion", side = 2, line = 3, col = "black")
+mtext("Presion de vapor de Mercurio\ncomo una funcion de la temperatura", side = 3,line = 1, font = 3, col = "black")
+```
+
+
+####Area de circulos
+```{r index}
+radio <- 0:20 # Asigna a "radio"" valores enteros
+area <- pi*radio^2 # Valores del area
+plot(radio, area,   # (x,y) = (radio,area)
+     type = "o",   # puntos y lineas
+     main = "Grafica del crecimiento del area en funcion del radio",
+     xlab = "Radio", # Etiqueta del eje x
+     ylab = "Area", # Etiqueta del eje y
+     col = "yellow", # color amarillo para la funcion
+     pch = 19) # Tipo de punto
+```
+
+
+
+####Grid
+```{r nx}
+plot(1:20) # grafica con datos del 1 al 100
+grid(NULL, NULL, lwd = 2, lty = 2) # Lineas delineadas dentro del marco 
+```

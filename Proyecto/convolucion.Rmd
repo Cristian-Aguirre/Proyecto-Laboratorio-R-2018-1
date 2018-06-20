@@ -1,0 +1,46 @@
+---
+title: "OOP en clase S4 en base a los algoritmos de Convolución"
+author: "Jesús Cóndor"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Indice
+
+   1. Introducción. 
+
+   2. Estado del arte.
+
+   3. Diseño del experimento.
+
+   4. Experimentos y resultados.
+
+   5. Discusión
+
+   6. Conclusiones.
+
+   7. Bibliografía
+
+
+## Introducción
+
+En las últimas décadas la programación y las matemáticas han ido desarrollando una interacción muy fuerte de modo que hoy en día se puede decir que la matemática necesita a la programación y la programación necesita de las matemáticas ya sea para cálculos, simulaciones, gráficos, etc. Dentro de las matemáticas tenemos lo que es la probabilidad y la estadística que concierne básicamente en la incertidumbre de cierto evento o suceso que pueda ocurrir en base a ciertos datos recopilados o sino definir una variable aleatoria y trabajar con ella bajo cierto espacio muestral. En esta oportunidad utilizaremos las propiedades de las variables aleatorias y nos enfocaremos en la transformaciones de esta y como esto puede ser llevado a la programación.
+
+La "Programación orientado a objetos" (OOP) nos ayuda grandemente en la implementación de convolución de distribuciones de variables aleatorias de valor real (discretas o continuas). Por tanto es bueno observar las características de la **OOP** y darle un soporte en base a los algoritmos de convolución que nos ayuda mucho en el análisis probabilístico, como por ejemplo en las transformaciones de **funciones**, en este caso las transformaciones de variables aleatorias y esto llevarlo a la programación en clase S4.
+
+En esta oportunidad el lenguaje de programación que utilizaremos sera el lenguaje R, que nos ayudara en la parte de los _gráficos_ y tambien de _cálculos_. Ademas trataremos los siguientes puntos:
+
+* Programación orientada a objetos para distribuciones de probabilidad.
+
+* La clase S4.
+
+* Implementación de las clases de distribuciones dentro del concepto S4.
+
+* El algoritmo de convolución y FFT.
+
+* Algoritmos basados en DFT(Transformación Discreta de Fourier).
+
+

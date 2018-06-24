@@ -1,0 +1,136 @@
+
+### Eficiencia computacional de nuestros algoritmos mediante la distancia de Kolmogorov
+
+## Clases S4
+
+Crearemos la clase Kolmogorov-Binomial como prueba
+
+```{r}
+
+#Clase Kolmogorov-Binomial con parametros n, p, potencia
+setClass(
+  "Kolmogorov-Binomial", representation(n="numeric", p="numeric", potencia="numeric"),
+  prototype(n=NA_integer_, p=NA_real_, potencia= NA_integer_)
+)
+
+```
+
+## Creamos los metodos de la clase S4
+
+Crearemos el metodo generico y un metodo para nuestra clase Kolmogorov-Binomial
+
+```{r}
+
+#Metodo generico para el metodo kolmogorov
+setGeneric(
+  "kolmogorov",
+  function(object){
+    standardGeneric("kolmogorov")
+  }
+)
+
+#Metodo kolmogorov sobre la distribucion Binomial
+setMethod(
+  "kolmogorov",
+  signature("Kolmogorov-Binomial"),
+  function(object){
+    library("distrEx")
+    distroptions(TruncQuantile = 1e-15)
+    B1 <- Binom(size = object@n, prob = object@p)
+    B2 <- convpow(B1, N = object@potencia)
+    D1 <- as(B1, "LatticeDistribution")
+    D2 <- convpow(D1, N = object@potencia)
+    D3 <- KolmogorovDist(B2, D2)
+  }
+  
+)
+
+```
+
+## Creamos nuestros objetos de prueba
+
+Crearemos 2 objetos de prueba para encontrar la eficacia de FFT sobre nuestra distribucion binomial
+
+```{r}
+
+ejem6 <- new("Kolmogorov-Binomial",
+          n=30, p= 0.8,                  # Parametros de distribucion binomial
+          potencia= 10
+)
+
+ejem7 <- new("Kolmogorov-Binomial",
+             n=50, p= 0.43,             # Parametros de distribucion binomial
+             potencia= 18
+)
+```
+
+### Ahora veamos la eficacia del metodo FFT, mediante la distancia de Kolmogorov
+```{r}
+
+ejemplo2.conv <- kolmogorov(ejem6)
+ejemplo2.conv
+
+ejemplo3.conv <- kolmogorov(ejem7)
+ejemplo3.conv
+
+```
+
+### Ahora, como ultimo ejemplo, vamos a mostrar como hay varios pasos para obtener la convolucion de la suma de distribuciones no centrales chi-squared
+
+### Tenemos que tener en cuenta ciertos parametros
+
+#### df = grado de libertad
+#### ncp = parametro no centralizado 
+
+### Primer metodo
+```{r}
+
+library("distr")
+distroptions(withgaps = FALSE)
+distroptions(TruncQuantile = 1e-8)              # Parametro de truncamiento de FFT
+distroptions(DefaultNrFFTGridPointsExponent = 18)
+
+#Primer metodo (FFT1) para hallar chi-squared
+df0 <- 4                  # Grado de libertad = 4
+ncp0 <- 4                 #parametro no centralizado 
+x0 <- 1.765               # x = 1.765
+Z <- Norm(mean = sqrt(ncp0/df0))       # media igual a sqrt(ncp0/df0), varianza 1
+Z2 <- Z^2                                 # Z2 <- Z^2  (chi-squared)
+res1 <- convpow(Z2, N = df0)            # Convolucion de Z2  (Z2^4)
+
+
+```
+
+
+### Segundo metodo
+
+```{r}
+#Segundo metodo (FFT2)
+Z <- Norm()             #Media igual a 0 , varianza 1
+Z2 <- Z^2               # Z^2 (chi-squared)
+X2 <- convpow(Z2, N = df0-1)           #Convolucion de de Z2^df0-1
+Y2 <- Norm(mean = sqrt(ncp0))^2        #Y2 sera el ultimo factor a sumar 
+res2 <- X2 + Y2               #Completamos la convolucion con el ultimo factor (Y2)
+
+```
+
+
+### Tercer metodo
+
+```{r}
+#Tercer metodo (FFT3)
+res3 <- Chisq(df = df0-1) + Y2    # Tenemos la distribucion chi-squared(df0-1) + Y2(ultimo factor)
+
+```
+
+
+### Mostremos los resultados por medio del 1 metodo (FFT1), segundo metodo (FFT2), tercer metodo (FFT3) y el resultado obtenido por el comando directo Chi-squared
+
+```{r}
+#Mostramos los 3 resultados obtenidos , de la siguient manera
+res <- c(p(res1)(x0), p(res2)(x0), p(res3)(x0),
+            +           pchisq(x0, df = df0, ncp = ncp0))
+names(res) <- c("FFT1", "FFT2", "FFT3", "R")
+res
+
+```

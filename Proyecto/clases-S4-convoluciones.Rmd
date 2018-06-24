@@ -1,0 +1,107 @@
+
+### Prueba de convolucion de variables aleatorias por el metodo FFT
+
+## Clases S4
+
+Creamos las clases de convoluciones de algunas distribuciones importantes
+
+```{r}
+#Clases general de convolucion
+setClass(
+  "Convolucion", representation(potencia="numeric"),
+    prototype(potencia=NA_integer_) 
+)
+
+#Clase de distribucion binomial
+setClass(
+  "Convolucion Binomial", representation(n="numeric", p="numeric"),
+    contains = "Convolucion"
+)
+
+#Clases de distribucion normal
+setClass(
+  "Convolucion Normal", representation(media="numeric", varianza="numeric"),
+    contains = "Convolucion"
+)
+
+
+```
+
+## Metodos de las clases S4
+
+Metodos para las convoluciones de algunas distribuciones
+
+```{r}
+
+#Metodo generico
+setGeneric(
+  "convoluciones",
+  function(object){
+    standardGeneric("convoluciones")
+  }
+)
+
+#Metodo para la convolucion de distribucion binomial
+setMethod(
+  "convoluciones",
+  signature("Convolucion Binomial"),
+  function(object){
+    library("distrEx")
+    distroptions(TruncQuantile = 1e-15)
+    D2 <- as(convpow(Binom(size = object@n, prob = object@p), N= object@potencia), 
+             "LatticeDistribution")         #METODO FFT
+    D2
+    }
+)
+
+#Metodo para la convolucion de distribucion normal
+setMethod(
+  "convoluciones",
+  signature("Convolucion Normal"),
+  function(object){
+    distroptions(TruncQuantile = 1e-10)
+    distroptions(DefaultNrFFTGridPointsExponent = 14)
+    D2 <- as(convpow(Norm(mean = object@media, sd= sqrt(object@varianza)), N= object@potencia),
+             "AbscontDistribution")             # METODO FFT
+    D2
+  }
+  
+)
+
+```
+
+## Creamos los objetos de prueba
+
+Crearemos 2 objetos de prueba, para verificar que se cumplen los metodos
+
+```{r}
+
+#Distribucion Binomial
+ejem4 <- new(
+  "Convolucion Binomial",
+  n=40, p=0.6,
+  potencia=14
+)
+
+#Distribucion Normal
+ejem5 <- new(
+        "Convolucion Normal",
+        media= 3, varianza= 25,
+        potencia= 10
+)
+
+```
+
+## Hallemos la convolucion de nuestros objetos
+
+```{r}
+
+#Convolucion binomial
+ejemplo.conv.bin <- convoluciones(ejem4)
+ejemplo.conv.bin
+
+
+#Convolucion normal
+ejemplo1.conv.norm <- convoluciones(ejem5)
+ejemplo1.conv.norm
+```

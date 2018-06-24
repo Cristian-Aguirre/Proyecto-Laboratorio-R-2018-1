@@ -1,0 +1,123 @@
+
+### Programa que nos muestra el uso de las clases S4 en el calculo de las variables aleatorias en R
+
+## Clases S4
+
+Creamos las clases de algunas distribuciones conocidas
+```{r}
+#Distribucion general
+setClass(
+    "Distribuciones", representation(primer_para= "numeric", segundo_para= "numeric"),
+    prototype(primer_para= NA_real_, segundo_para= NA_real_)
+  )
+
+#Distribucion Normal
+setClass(
+    "Distribucion Normal", contains = "Distribuciones"
+)
+
+#Distribucion Uniforme
+setClass(
+    "Distribucion Uniforme", contains = "Distribuciones"
+)
+
+#Distribucion de Poison
+setClass(
+    "Distribucion de Poison", contains = "Distribuciones"
+)
+
+```
+
+## Metodos S4
+
+Creamos el metodo generico y el metodo para cada una de las distribuciones
+
+```{r}
+#Metodo generico
+setGeneric(
+  "distribuciones",
+  function(object) {
+    standardGeneric("distribuciones")
+  }
+)
+
+#Metodo para una distribucion normal
+setMethod(
+  "distribuciones",
+  signature("Distribucion Normal"),
+  function(object) {
+    library(distr)
+    N<- Norm(mean= object@primer_para, sd=object@segundo_para)
+    N
+  }
+)
+
+#Metodo para una distribucion uniforme
+setMethod(
+  "distribuciones",
+  signature("Distribucion Uniforme"),
+  function(object) {
+    library(distr)
+    N<- Unif(Max = object@primer_para, Min=object@segundo_para)
+    N
+  }
+)
+
+#Metodo para una distribucion de poison
+setMethod(
+  "distribuciones",
+  signature("Distribucion de Poison"),
+  function(object){
+    library(distr)
+    N<- Pois(lambda = object@primer_para)
+    N
+  }
+)
+ 
+
+```
+
+## Creamos los objetos de prueba
+
+Crearemos 3 objetos de prueba:
+
+
+```{r}
+#Objeto de una distribucion normal
+ejemp1 <- new("Distribucion Normal",
+           primer_para=2,
+          segundo_para=1.3
+)
+
+#Objeto de una distribucion uniforme
+ejem2 <- new("Distribucion Uniforme",
+          primer_para=2,
+          segundo_para=0
+)
+
+#Objeto de una distribucion de poison
+ejem3 <-new("Distribucion de Poison",
+        primer_para=3
+)
+
+```
+
+Ahora podemos realizar operaciones sobre los objetos, con las funciones p(el CDF), r(numeros aleatorio de acuerdo a la distribucion), d(el PDF), q(funcion de cuantidad)
+
+
+
+```{r}
+#Hallemos el PDF de la distribucion normal con x= 0.4
+distro.normal <- distribuciones(ejemp1)
+d(distro.normal)(0.4)
+
+#Hallemos el CDF de la distribucion uniforme con x= 0.6
+distro.uniforme <- distribuciones(ejem2)
+p(distro.uniforme)(0.6)
+
+#Hallemos numeros aleatorias de la distribucion de poison con x=14
+distro.poison <- distribuciones(ejem3)
+r(distro.poison)(14)
+
+
+```

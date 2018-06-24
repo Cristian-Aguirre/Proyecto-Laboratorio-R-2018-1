@@ -43,4 +43,15 @@ En esta oportunidad el lenguaje de programación que utilizaremos sera el lengua
 
 * Algoritmos basados en DFT(Transformación Discreta de Fourier).
 
+## Estado Del Arte
+
+
+La convolución de las distribuciones de probabilidad surge en la teoría de la probabilidad y la estadística como la operación en términos de distribuciones de probabilidad que corresponde a la adición de variables aleatorias independientes y por extensión, a la formación de combinaciones lineales de variables aleatorias. 
+
+Para su implementación, el uso de la Transformada Rápida de Fourier(FFT) ha sido muy común desde la aparición del algoritmo de Cooley y Tukey, el cual es un algoritmo eficiente que ayuda a calcular la Transformada de Fourier Discreta(DFT) y su inversa.
+Las apariciones de arquitecturas informáticas paralelas dan más importancia al uso de la FFT, en contraste con la convolución mediante cálculos directos y si sumamos a esto un enfoque de Programación Orientada a Objetos (POO) hace que esta técnica sea aún más atractiva ya que podemos usarla como un algoritmo predeterminado en situaciones donde no existe una alternativa mejor, mientras que en casos especiales como por ejemplo , las variables aleatorias normales o de Poisson, donde la convolución se reduce a la transformación de los parámetros correspondientes.
+
+En este contexto, la convolución es un arma potente para establecer una aritmética completa de operaciones matemáticas que actúan sobre objetos de distribución, que comprende, entre otros, operadores +, -, *, / y ^. En esta aritmética, identificamos distribuciones con variables aleatorias independientes: si X1 y X2 son variables de aleatorias independiente, X1 + X2 producirá la distribución de la suma de variables aleatorias (independientes) respectivas, es decir, su convolución. Técnicamente, hablando en términos de programación, hemos sobrecargado el operador + para distribuciones univariables. La propia convolución se calcula de acuerdo con las clases reales de los operandos, con métodos particulares (exactos) para, por ejemplo, distribuciones normales o de Poisson.
+
+
 

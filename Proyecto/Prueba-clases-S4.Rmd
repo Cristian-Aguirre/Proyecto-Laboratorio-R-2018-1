@@ -1,0 +1,286 @@
+
+Ejemplo de clases S4, caracteristicas de personas
+
+Codigo basado en la programacion orienta a objetos en R,
+con fuente en el siguiente post: 
+
+http://digitheadslabnotebook.blogspot.com/2012/09/oo-in-r.html
+
+Modificado por el grupo 3 para el proyecto del Curso CM-274  
+
+2018-1
+
+
+```{r}
+# Defieniendo las clases S4 de personas
+setClass(
+  "Persona",
+  representation(name = "character", age = "numeric"),
+  prototype(name = NA_character_, age = NA_real_)
+)
+
+```
+
+Definiendo subclases de diferentes tipos de personas
+
+Definimos a programadores y matematicos
+
+```{r}
+setClass("Programador", representation(language = "character"), contains="Persona")
+setClass("Matematico", representation(especialidad = "character"), contains="Persona")
+```
+
+Creacion del metodo generico talento.
+Creacion del metodo talento, la cual nos muestra la especialidad en su area de
+trabajo de cada persona
+```{r}
+setGeneric(
+  "talento",
+  function(object) {
+    standardGeneric("talento")
+  }
+)
+
+setMethod(
+  "talento",
+  signature("Programador"),
+  function(object) {
+    paste(paste(object@name),"de",paste(object@age),"años, escribe codigos en ",
+          paste(object@language, collapse=", "))
+  }
+)
+
+setMethod(
+  "talento",
+  signature("Matematico"),
+  function(object) {
+    paste(paste(object@name),"de",paste(object@age),"años, se especializa en", 
+          paste(object@especialidad, collapse=", "))
+  }
+)
+
+
+```
+
+
+Creamos algunas personas(objetos) con diferentes caracteristicas
+
+```{r}
+
+cristian <- new("Programador",
+              name="Cristian Aguirre",
+              age=22,
+              language=c("C", "Java", "R", "C++"))
+
+jesus <- new("Programador",
+                name="Jesus Condor",
+                age=30,
+              language=c("C++", "JavaScript", "R"))
+
+jean <- new("Matematico",
+             name="Jean Alvitres",
+            age = 27,
+             especialidad=c("Estadistica", "Conjetura de Goldbash"))
+
+martin <- new("Matematico",
+            name="Martin Lopez",
+            age= 33,
+            especialidad=c("Ciencia de datos", "Inferencia estadistica"))
+
+```
+
+Mostramos los resultados para algunas personas
+
+```{r}
+
+talento(cristian)
+
+
+talento(jesus)
+
+
+talento(jean)
+
+
+```
+
+
+Funcion que nos da informacion de las personas
+```{r}
+
+getNameAndTitle <- function(person) {
+  sprintf("%s, %s", person@name, class(person))
+}
+```
+
+
+Informacion de algunas personas
+```{r}
+
+#Informacion de cristian
+getNameAndTitle(cristian)
+
+#Informacion de martin
+getNameAndTitle(martin)
+```
+
+Escribiremos una clase y funciones que cambie el estado de su salario de una persona
+Una persona puede recibir un aumento o descuento
+
+```{r}
+
+setClass("Empleado",
+         representation(boss = "Persona", salary="numeric"),
+         contains = "Persona")
+
+#El metodo generico para aumento
+setGeneric(
+  "cambio",
+  function(object, percent=0) {
+    standardGeneric("cambio")
+  })
+
+#Metodo cambio
+setMethod(
+  "cambio",
+  signature("Empleado"),
+  function(object, percent) {
+    object@salary <- object@salary * (1+(percent/100))
+    object
+  })
+
+```
+
+
+Ahora modificamos el salario de carlos, creamos dicho objetos(carlos) asi:
+
+```{r}
+carlos <- new("Empleado",
+                name="Carlos Espinoza",
+                boss=new("Persona",name="Mr. Aguirre"),
+                salary=1500)
+
+#Salario actual de carlos
+carlos@salary
+
+# Mr. Aguirre le ofrece un aumento de salario a carlos
+carlos <-cambio(carlos, percent=10)
+
+#Mostramos el salario de carlos despues del aumento
+carlos@salary
+
+```
+
+
+Agreguemos la clase de un programador que a sido contratado:
+```{r}
+
+setClass("Programador contratado", contains=c("Programador","Empleado"))
+```
+
+Ahora detallamos el metodo talento para programadores contratados:
+
+```{r}
+setMethod(
+  "talento",
+  signature("Programador contratado"),
+  function(object) {
+    paste("Codigos escritos en ", paste(object@language, collapse=", "), "para ", object@boss@name)
+  }
+)
+
+
+```
+
+
+Creamos un objeto, cesar, programador que ha sido contratado
+
+```{r}
+
+cesar <- new("Programador contratado",
+             name="Cesar",
+             age=29,
+             boss=new("Persona", name="Aguirre", age=22),
+             language=c("Java", "R", "Python", "Clojure"),
+             salary=8000)
+
+```
+
+Ahora cambiamos el salario de cesar y verificamos:
+
+```{r}
+
+talento(cesar)
+
+#Salario actual de cesar
+cesar@salary
+
+#Si cesar es un mal programador se le hara un descuento de salario
+cesar <-cambio(cesar,percent=-10)
+
+#Mostramos el nuevo salario de Cesar, con el descuento
+cesar@salary
+
+
+```
+
+
+Describimos metodos que nos diga como trabajaran personas que sean matematicos y programadores
+Metodo juntos, nos indicara la relacion:
+
+```{r}
+
+setGeneric(
+  "juntos",
+  function(persona1, persona2) {
+    standardGeneric("juntos")
+  })
+
+setMethod(
+  "juntos",
+  signature("Matematico", "Matematico"),
+  function(persona1, persona2) {
+    sprintf("%s y %s pueden investigar conjeturas juntos!", persona1@name, persona2@name)
+  })
+
+setMethod(
+  "juntos",
+  signature("Matematico", "Programador"),
+  function(persona1, persona2) {
+    sprintf("%s y %s pueden reaizar un proyecto de Ciencia de datos!", persona1@name, persona2@name)
+  })
+
+setMethod(
+  "juntos",
+  signature("Programador", "Programador"),
+  function(persona1, persona2) {
+    sprintf("%s y %s pueden desarrollar software!", persona1@name, persona2@name)
+  })
+
+setMethod(
+  "juntos",
+  signature("Programador", "Matematico"),
+  function(persona1, persona2) {
+    sprintf("%s y %s pueden reaizar un proyecto de Ciencia de datos!", persona1@name, persona2@name)
+  })
+
+
+```
+
+
+Ahora veamos como trabajaran los empleados:
+
+```{r}
+
+
+#Como trabajan juntos cristian y jesus
+juntos(cristian, jesus)
+
+#Como trabajan juntos jean y jesus
+juntos(jean, jesus)
+
+#Como trabajan juntos cristian y jean
+juntos(cristian, jean)
+
+```
+

@@ -77,9 +77,9 @@ jesus <- new("Programador",
                 age=30,
               language=c("C++", "JavaScript", "R"))
 
-jean <- new("Matematico",
+jean <- new("Programador",
              name="Jean Alvitres",
-            age = 27,
+            age = 24,
              especialidad=c("Estadistica", "Conjetura de Goldbash"))
 
 martin <- new("Matematico",

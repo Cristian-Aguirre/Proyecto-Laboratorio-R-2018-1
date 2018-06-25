@@ -41,8 +41,7 @@ setMethod(
     D1 <- as(B1, "LatticeDistribution")
     D2 <- convpow(D1, N = object@potencia)
     D3 <- KolmogorovDist(B2, D2)
-  }
-  
+  }  
 )
 
 ```
@@ -113,7 +112,6 @@ Y2 <- Norm(mean = sqrt(ncp0))^2        #Y2 sera el ultimo factor a sumar
 res2 <- X2 + Y2               #Completamos la convolucion con el ultimo factor (Y2)
 
 ```
-
 
 ### Tercer metodo
 
